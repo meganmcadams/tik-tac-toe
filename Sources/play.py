@@ -16,14 +16,15 @@ def play(board, turn, u_icon, b_icon, round, bot):
             good = True
             text(bot,": Your turn! Which place (0-8) would you like to play?")
             choice = input("--> ")
-            if choice not in board or (choice == 'X' or choice == 'O'):
+            if choice not in board or (choice == 'X' or choice == 'O' or not choice):
                 text(bot,": That's not an option, sorry.")
+                good = False
 
         board[board.index(choice)] = u_icon
             
     else:
         
-        while choice not in board: # whlie choice is not an option
+        while choice not in board: # while choice is not an option
             choice = str(randrange(0,8)) # generate choice (0-8)
         text(bot,": My turn! I'll pick... ",choice,"!")
 
@@ -53,4 +54,8 @@ def check_for_win(board):
     elif board[2] == board[4] and board[2] == board[6]:
         return board[2]
 
-    return '' # return blank if no winner yet
+    for b in board:
+        if b is not 'X' and b is not 'O':
+            return '' # return blank if no winner yet and there are still open spaces
+
+    return 'C' # return C if no winner yet and there are NOT still open spaces

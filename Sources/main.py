@@ -5,11 +5,15 @@ PYTHONPATH = ('<project directory>')
 
 from print_board import *
 from play import *
+from load import *
+from save import *
 
 from functools import partial
 text = partial(print, sep='', end="\n\n")
 
 # main
+
+saves = load()
 
 board = ['0','1','2','3','4','5','6','7','8']
 bot = "Vay"
@@ -19,7 +23,15 @@ user = input("--> ")
 
 if user == bot: # if user picks the bot's name
     text(bot,": Oh! We have the same name! That's gonna be a bit confusing.")
-text(bot,": Nice to meet you, ",user,". Let's play some Tic Tak Toe!")
+
+try: # check if they've played previously
+    u_info = saves[user]
+    if int(u_info[0]) > int(u_info[1]): # if wins is more than losses
+        text(bot,": Nice to see you again, ",user,"! I'm sure to win this time!")
+    else:
+        text(bot,": I see you've come back to try to redeem yourself, ",user,". I will win again!")
+except KeyError:
+    text(bot,": Nice to meet you, ",user,". Let's play some Tic Tak Toe!")
 
 # get user choice for who should go first
 text(bot,": Would you like to go first?")
@@ -59,7 +71,17 @@ while result == '': # play while there isn't a winner
         turn = "user"
     else:
         turn = "bot"
+    round += 1
 
 print_board(board, round)
 
+if result == u_icon:
+    text(bot,": You won! Congrats!")
+elif result == b_icon:
+    text(bot,": Ha! I won!")
+else:
+    text(bot,": Huh... I guess we tied.")
+
 text(bot,": Thanks for playing, ",user,"!")
+
+save(user, result, u_icon, saves)
