@@ -4,18 +4,15 @@ import sys
 PYTHONPATH = ('<project directory>')
 
 from print_board import *
-from functools import partial
 from play import *
+
+from functools import partial
 text = partial(print, sep='', end="\n\n")
 
 # main
 
-board = []
+board = ['0','1','2','3','4','5','6','7','8']
 bot = "Vay"
-
-i = 0
-for i in range(9):
-    board.append(i)
 
 text(bot,": Hi! My name is ",bot,". What's your name?")
 user = input("--> ")
@@ -58,7 +55,11 @@ round = 1
 while result == '': # play while there isn't a winner
 
     result = play(board,turn,u_icon,b_icon, round, bot)
-    print("Test")
-    break
+    if turn == "bot":
+        turn = "user"
+    else:
+        turn = "bot"
+
+print_board(board, round)
 
 text(bot,": Thanks for playing, ",user,"!")
